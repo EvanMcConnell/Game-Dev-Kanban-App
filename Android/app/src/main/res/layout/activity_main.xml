@@ -42,8 +42,7 @@
                     android:id="@+id/ToDoScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/taskgrid"
-                    android:scrollIndicators="start|end">
+                    android:background="@drawable/taskgrid">
 
                     <TableLayout
                         android:id="@+id/ToDoTableView"
@@ -51,55 +50,24 @@
                         android:layout_height="wrap_content">
 
                         <TableRow
-                            android:id="@+id/ToDoTopRow"
+                            android:id="@+id/ToDoRow"
                             android:layout_width="180dp"
                             android:layout_height="156dp"
-                            android:layout_margin="8dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="7dp"
                             android:minWidth="500dp"
                             android:minHeight="156dp"
                             android:orientation="horizontal">
 
                             <Button
                                 android:id="@+id/button"
-                                style="@style/taskBlock"
+                                style="@style/progBlock"
                                 android:drawableTop="@drawable/ic_bracket"
-                                android:drawablePadding="-50dp"
                                 android:paddingTop="35dp"
                                 android:text="Third skill tree" />
 
-                            <Button
-                                android:id="@+id/button6"
-                                style="@style/taskBlock"
-                                android:text="heck" />
-
-                            <Button
-                                android:id="@+id/button5"
-                                style="@style/taskBlock"
-                                android:text="heck" />
-
-                            <Button
-                                android:id="@+id/button4"
-                                style="@style/taskBlock"
-                                android:text="heck" />
-
-                            <Button
-                                android:id="@+id/button3"
-                                style="@style/taskBlock"
-                                android:text="heck" />
-
-                            <Button
-                                style="@style/taskBlock"
-                                android:text="heck" />
-
                         </TableRow>
-
-                        <TableRow
-                            android:id="@+id/ToDoBottomRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="156dp"
-                            android:layout_margin="8dp"
-                            android:minWidth="500dp"
-                            android:minHeight="0dp" />
 
                     </TableLayout>
                 </HorizontalScrollView>
@@ -124,30 +92,25 @@
                 <HorizontalScrollView
                     android:id="@+id/DoingScrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/taskgrid">
 
                     <TableLayout
                         android:id="@+id/DoingTableView"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp">
 
                         <TableRow
-                            android:id="@+id/DoingTopRow"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="8dp"
+                            android:id="@+id/DoingRow"
+                            android:layout_width="180dp"
+                            android:layout_height="156dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="7dp"
                             android:minWidth="500dp"
                             android:minHeight="156dp"
                             android:orientation="horizontal" />
-
-                        <TableRow
-                            android:id="@+id/DoingBottomRow"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="8dp"
-                            android:minWidth="500dp"
-                            android:minHeight="0dp" />
 
                     </TableLayout>
                 </HorizontalScrollView>
@@ -178,24 +141,19 @@
                     <TableLayout
                         android:id="@+id/IdleTableView"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp">
 
                         <TableRow
-                            android:id="@+id/IdleTopRow"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="8dp"
+                            android:id="@+id/IdleRow"
+                            android:layout_width="180dp"
+                            android:layout_height="156dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="7dp"
                             android:minWidth="500dp"
                             android:minHeight="156dp"
                             android:orientation="horizontal" />
-
-                        <TableRow
-                            android:id="@+id/IdleBottomRow"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="8dp"
-                            android:minWidth="500dp"
-                            android:minHeight="0dp" />
 
                     </TableLayout>
                 </HorizontalScrollView>
@@ -229,21 +187,15 @@
                         android:layout_height="match_parent">
 
                         <TableRow
-                            android:id="@+id/DoneTopRow"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="8dp"
+                            android:id="@+id/DoneRow"
+                            android:layout_width="180dp"
+                            android:layout_height="156dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="7dp"
                             android:minWidth="500dp"
                             android:minHeight="156dp"
                             android:orientation="horizontal" />
-
-                        <TableRow
-                            android:id="@+id/DoneBottomRow"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="8dp"
-                            android:minWidth="500dp"
-                            android:minHeight="0dp" />
 
                     </TableLayout>
                 </HorizontalScrollView>

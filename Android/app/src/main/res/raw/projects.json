@@ -1,0 +1,123 @@
+[
+  {
+    "id": 1,
+    "title": "Animate Shopkeep",
+    "skills": [
+      "ART"
+    ],
+    "members": [
+      {
+        "id": 4,
+        "name": "Van Gogh",
+        "skills": [
+          "ART"
+        ],
+        "description": "Sad but paints well"
+      }
+    ],
+    "description": "The Shopkeep needs animations for talking and handeling items",
+    "state": "DONE"
+  },
+  {
+    "id": 2,
+    "title": "Fix Bugs",
+    "skills": [
+      "PROGRAMMING"
+    ],
+    "members": [
+      {
+        "id": 0,
+        "name": "John Smith",
+        "skills": [
+          "PROGRAMMING"
+        ],
+        "description": "Best Boy"
+      },
+      {
+        "id": 1,
+        "name": "Gregg Codeman",
+        "skills": [
+          "PROGRAMMING"
+        ],
+        "description": "Likes egg sandwiches"
+      },
+      {
+        "id": 2,
+        "name": "Beth Gamerson",
+        "skills": [
+          "PROGRAMMING",
+          "DESIGN"
+        ],
+        "description": "Has the high score in galaga"
+      }
+    ],
+    "description": "We need to wait for Barry to come in and take a look on Tuesday",
+    "state": "IDLE"
+  },
+  {
+    "id": 3,
+    "title": "Make Theme Song",
+    "skills": [
+      "AUDIO"
+    ],
+    "members": [
+      {
+        "id": 5,
+        "name": "Da Vinci",
+        "skills": [
+          "DESIGN",
+          "AUDIO"
+        ],
+        "description": "Crazy inventor"
+      },
+      {
+        "id": 6,
+        "name": "Jack Black",
+        "skills": [
+          "AUDIO"
+        ],
+        "description": "Makes good music and tells good jokes"
+      }
+    ],
+    "description": "We need to wait for Barry to come in and take a look on Tuesday",
+    "state": "IDLE"
+  },
+  {
+    "id": 4,
+    "title": "test",
+    "skills": [
+      "DESIGN"
+    ],
+    "members": [
+      {
+        "id": 3,
+        "name": "Billy Design",
+        "skills": [
+          "DESIGN"
+        ],
+        "description": "He do be designing tho"
+      }
+    ],
+    "description": "billy\u0027s job",
+    "state": "DOING"
+  },
+  {
+    "id": 5,
+    "title": "test",
+    "skills": [
+      "ART"
+    ],
+    "members": [
+      {
+        "id": 4,
+        "name": "Van Gogh",
+        "skills": [
+          "ART"
+        ],
+        "description": "Sad but paints well"
+      }
+    ],
+    "description": "testing",
+    "state": "DOING"
+  }
+]

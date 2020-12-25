@@ -8,13 +8,48 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="taskBlock">
+    <style name="progBlock">
         <item name="android:background">@drawable/taskblock</item>
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_width">180dp</item>
-        <item name="android:layout_height">140dp</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:textColor">#132743</item>
+        <item name="android:drawablePadding">-50dp</item>
+        <item name="android:drawableTop">@drawable/ic_bracket</item>
+    </style>
+
+    <style name="audioBlock">
+        <item name="android:background">@drawable/taskblock</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">180dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">#132743</item>
+        <item name="android:drawablePadding">-50dp</item>
+        <item name="android:drawableTop">@drawable/ic_note</item>
+    </style>
+
+    <style name="designBlock">
+        <item name="android:background">@drawable/taskblock</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">180dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">#132743</item>
+        <item name="android:drawablePadding">-50dp</item>
+        <item name="android:drawableTop">@drawable/ic_bulb</item>
+    </style>
+
+    <style name="artBlock">
+        <item name="android:background">@drawable/taskblock</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">180dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">#132743</item>
+        <item name="android:drawablePadding">-50dp</item>
+        <item name="android:drawableTop">@drawable/ic_palette</item>
     </style>
 
 </resources>
