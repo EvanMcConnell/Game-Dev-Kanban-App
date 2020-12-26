@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipDescription
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.DragEvent
 import android.view.View
 import android.view.View.*
@@ -20,6 +19,9 @@ class MainActivity : AppCompatActivity() {
 
     var draggedView:ArrayList<View> = ArrayList()
 
+    var refineButtons:ArrayList<Button> = ArrayList()
+    var currentRefine:Int = 0
+
     var validDrop = false
 
     lateinit var projects: ProjectStore
@@ -34,6 +36,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+        viewAllButton.setOnClickListener(viewAllTasks())
+        refineButtons.add(viewAllButton)
+        viewProgButton.setOnClickListener(refineRows(MemberSkill.PROGRAMMING))
+        refineButtons.add(viewProgButton)
+        viewDesignButton.setOnClickListener(refineRows(MemberSkill.DESIGN))
+        refineButtons.add(viewDesignButton)
+        viewAudioButton.setOnClickListener(refineRows(MemberSkill.AUDIO))
+        refineButtons.add(viewAudioButton)
+        viewArtButton.setOnClickListener(refineRows(MemberSkill.ART))
+        refineButtons.add(viewArtButton)
+
 
         ToDoRow.setOnDragListener(dragListener)
         rows.add(ToDoRow)
@@ -44,14 +57,12 @@ class MainActivity : AppCompatActivity() {
         DoneRow.setOnDragListener(dragListener)
         rows.add(DoneRow)
 
-        button.setOnLongClickListener(taskDragListener)
-
 
         populateRows()
     }
 
 
-    val taskDragListener = OnLongClickListener {
+    private val taskDragListener = OnLongClickListener {
         val clipText = "Test"
         val item = ClipData.Item(clipText)
         val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
@@ -69,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         true
     }
 
-    val dragListener = OnDragListener { view, event ->
+    private val dragListener = OnDragListener { view, event ->
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 validDrop = false
@@ -77,7 +88,6 @@ class MainActivity : AppCompatActivity() {
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
                 view.invalidate()
-                button.text = "yay"
                 validDrop = true
                 true
             }
@@ -85,7 +95,6 @@ class MainActivity : AppCompatActivity() {
                 if(rows.contains(view)) {
                     true
                 }else{
-                    button.text = "bingo"
                     view.visibility = VISIBLE
                     false
                 }
@@ -93,7 +102,6 @@ class MainActivity : AppCompatActivity() {
             }
             DragEvent.ACTION_DRAG_EXITED -> {
                 view.visibility = VISIBLE
-                button.text = "help"
                 validDrop = false
                 view.invalidate()
                 true
@@ -121,10 +129,8 @@ class MainActivity : AppCompatActivity() {
 
                     destination.addView(v)
                     v.visibility = VISIBLE
-                    button.text = "nope"
                     true
                 } else{
-                    //button.text = "yay"
                     true
                 }
             }
@@ -140,85 +146,284 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun populateRows() {
-        var i: Int = 0
-        projects.findAll().forEach {
-            i = i + 1
+
+    private fun refineRows(searchSkill: MemberSkill) = OnClickListener{
+        rows.forEach{ it.removeAllViews() }
+
+        when(searchSkill){
+            MemberSkill.PROGRAMMING -> {
+                refineButtons[1].background = refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
+                refineButtons[currentRefine].background = refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
+                currentRefine = 1
+            }
+            MemberSkill.DESIGN -> {
+                refineButtons[2].background = refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
+                refineButtons[currentRefine].background = refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
+                currentRefine = 2
+            }
+            MemberSkill.AUDIO -> {
+                refineButtons[3].background = refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
+                refineButtons[currentRefine].background = refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
+                currentRefine = 3
+            }
+            MemberSkill.ART -> {
+                refineButtons[4].background = refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
+                refineButtons[currentRefine].background = refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
+                currentRefine = 4
+            }
+        }
+
+        projects.findSkill(searchSkill).forEach {
             when (it.state) {
                 ProjectState.TODO -> {
-                    //val button = Button(this)
-                    val newButton = assignIcons(it)
+                    val newButton = Button(this)
+                    //val newButton = assignIcons(it)
 
                     newButton.text = it.title
 
-
-                    ToDoRow.addView(newButton)
-                }
-
-                ProjectState.INPROGRESS -> {
-                    //val button = Button(this, null, R.style.taskBlock)
-                    val newButton = assignIcons(it)
-
+                    when(it.skill){
+                        MemberSkill.DESIGN -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bulb, 0, 0)
+                        MemberSkill.PROGRAMMING -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bracket, 0, 0)
+                        MemberSkill.AUDIO -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_note, 0, 0)
+                        MemberSkill.ART ->newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_palette, 0, 0)
+                    }
                     newButton.text = it.title
-
-                    it.state = ProjectState.DOING
-
-                    DoingRow.addView(newButton)
-                }
-
-                ProjectState.WAITING -> {
-                    //val button = Button(this, null, R.style.taskBlock)
-                    val newButton = assignIcons(it)
-
-                    newButton.text = it.title
-
-                    IdleRow.addView(newButton)
-                }
-
-                ProjectState.DONE -> {
-                    //val newButton = Button(this, null, R.style.taskBlock)
-                    val newButton: Button = assignIcons(it)
-
-                    newButton.text = it.title
-                    button.text = it.title
 
                     var params: TableRow.LayoutParams = TableRow.LayoutParams(
-                        180 * newButton.getContext().getResources().getDisplayMetrics().density.toInt(),
+                        180 * newButton.context.resources.displayMetrics.density.toInt(),
                         TableRow.LayoutParams.MATCH_PARENT
                     )
 
 
-
+                    IdleRow.addView(newButton)
 
                     newButton.layoutParams = params
-
-
-
-                    DoneRow.addView(newButton)
+                    newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
                     newButton.setOnLongClickListener(taskDragListener)
-                    print("////////////////////////////////////// &it.description")
+                }
+
+                ProjectState.DOING -> {
+                    val newButton = Button(this)
+                    //val newButton = assignIcons(it)
+
+                    newButton.text = it.title
+
+                    when(it.skill){
+                        MemberSkill.DESIGN -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bulb, 0, 0)
+                        MemberSkill.PROGRAMMING -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bracket, 0, 0)
+                        MemberSkill.AUDIO -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_note, 0, 0)
+                        MemberSkill.ART ->newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_palette, 0, 0)
+                    }
+                    newButton.text = it.title
+
+                    var params: TableRow.LayoutParams = TableRow.LayoutParams(
+                        180 * newButton.context.resources.displayMetrics.density.toInt(),
+                        TableRow.LayoutParams.MATCH_PARENT
+                    )
+
+
+                    DoingRow.addView(newButton)
+
+                    newButton.layoutParams = params
+                    newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
+
+                    newButton.setOnLongClickListener(taskDragListener)
+                }
+
+                ProjectState.IDLE -> {
+                    val newButton = Button(this)
+                    //val newButton = assignIcons(it)
+
+                    newButton.text = it.title
+
+                    when(it.skill){
+                        MemberSkill.DESIGN -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bulb, 0, 0)
+                        MemberSkill.PROGRAMMING -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bracket, 0, 0)
+                        MemberSkill.AUDIO -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_note, 0, 0)
+                        MemberSkill.ART ->newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_palette, 0, 0)
+                    }
+                    newButton.text = it.title
+
+                    var params: TableRow.LayoutParams = TableRow.LayoutParams(
+                        180 * newButton.context.resources.displayMetrics.density.toInt(),
+                        TableRow.LayoutParams.MATCH_PARENT
+                    )
+
+
+                    IdleRow.addView(newButton)
+
+                    newButton.layoutParams = params
+                    newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
+
+                    newButton.setOnLongClickListener(taskDragListener)
+                }
+
+                ProjectState.DONE -> {
+                    val newButton = Button(this)
+                    //var newButton:Button = assignIcons(it)
+
+                    newButton.text = it.title
+
+
+                    var params: TableRow.LayoutParams = TableRow.LayoutParams(
+                        180 * newButton.context.resources.displayMetrics.density.toInt(),
+                        TableRow.LayoutParams.MATCH_PARENT
+                    )
+
+
+                    //params.topMargin = 35 * newButton.context.resources.displayMetrics.density.toInt()
+                    //params.setMargins(0, 50, 0, 0)
+
+                    //newButton.setCompoundDrawables(null, newButton.context.resources.getDrawable(this, R.drawable.ic_palette)), null, null)
+                    when(it.skill){
+                        MemberSkill.DESIGN -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bulb, 0, 0)
+                        MemberSkill.PROGRAMMING -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bracket, 0, 0)
+                        MemberSkill.AUDIO -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_note, 0, 0)
+                        MemberSkill.ART ->newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_palette, 0, 0)
+                    }
+                    DoneRow.addView(newButton)
+
+                    newButton.layoutParams = params
+                    newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
+
+                    newButton.setOnLongClickListener(taskDragListener)
+                }
+            }
+        }
+    }
+
+    private fun populateRows() {
+        var i = 0
+        projects.findAll().forEach {
+            i++
+            when (it.state) {
+                ProjectState.TODO -> {
+                    val newButton = Button(this)
+                    //val newButton = assignIcons(it)
+
+                    newButton.text = it.title
+
+                    when(it.skill){
+                        MemberSkill.DESIGN -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bulb, 0, 0)
+                        MemberSkill.PROGRAMMING -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bracket, 0, 0)
+                        MemberSkill.AUDIO -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_note, 0, 0)
+                        MemberSkill.ART ->newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_palette, 0, 0)
+                    }
+
+
+                    newButton.text = it.title
+
+                    var params: TableRow.LayoutParams = TableRow.LayoutParams(
+                        180 * newButton.context.resources.displayMetrics.density.toInt(),
+                        TableRow.LayoutParams.MATCH_PARENT
+                    )
+
+
+                    IdleRow.addView(newButton)
+
+                    newButton.layoutParams = params
+                    newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
+
+                    newButton.setOnLongClickListener(taskDragListener)
+                }
+
+                ProjectState.DOING -> {
+                    val newButton = Button(this)
+                    //val newButton = assignIcons(it)
+
+                    newButton.text = it.title
+
+                    when(it.skill){
+                        MemberSkill.DESIGN -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bulb, 0, 0)
+                        MemberSkill.PROGRAMMING -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bracket, 0, 0)
+                        MemberSkill.AUDIO -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_note, 0, 0)
+                        MemberSkill.ART ->newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_palette, 0, 0)
+                    }
+                    newButton.text = it.title
+
+                    var params: TableRow.LayoutParams = TableRow.LayoutParams(
+                        180 * newButton.context.resources.displayMetrics.density.toInt(),
+                        TableRow.LayoutParams.MATCH_PARENT
+                    )
+
+
+                    DoingRow.addView(newButton)
+
+                    newButton.layoutParams = params
+                    newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
+
+                    newButton.setOnLongClickListener(taskDragListener)
+                }
+
+                ProjectState.IDLE -> {
+                    val newButton = Button(this)
+                    //val newButton = assignIcons(it)
+
+                    newButton.text = it.title
+
+                    when(it.skill){
+                        MemberSkill.DESIGN -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bulb, 0, 0)
+                        MemberSkill.PROGRAMMING -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bracket, 0, 0)
+                        MemberSkill.AUDIO -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_note, 0, 0)
+                        MemberSkill.ART ->newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_palette, 0, 0)
+                    }
+                    newButton.text = it.title
+
+                    var params: TableRow.LayoutParams = TableRow.LayoutParams(
+                        180 * newButton.context.resources.displayMetrics.density.toInt(),
+                        TableRow.LayoutParams.MATCH_PARENT
+                    )
+
+
+                    IdleRow.addView(newButton)
+
+                    newButton.layoutParams = params
+                    newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
+
+                    newButton.setOnLongClickListener(taskDragListener)
+                }
+
+                ProjectState.DONE -> {
+                    val newButton = Button(this)
+                    //var newButton:Button = assignIcons(it)
+
+                    newButton.text = it.title
+
+
+                    var params: TableRow.LayoutParams = TableRow.LayoutParams(
+                        180 * newButton.context.resources.displayMetrics.density.toInt(),
+                        TableRow.LayoutParams.MATCH_PARENT
+                    )
+
+
+                    //params.topMargin = 35 * newButton.context.resources.displayMetrics.density.toInt()
+                    //params.setMargins(0, 50, 0, 0)
+
+                    //newButton.setCompoundDrawables(null, newButton.context.resources.getDrawable(this, R.drawable.ic_palette)), null, null)
+                    when(it.skill){
+                        MemberSkill.DESIGN -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bulb, 0, 0)
+                        MemberSkill.PROGRAMMING -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_bracket, 0, 0)
+                        MemberSkill.AUDIO -> newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_note, 0, 0)
+                        MemberSkill.ART ->newButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_palette, 0, 0)
+                    }
+                    DoneRow.addView(newButton)
+
+                    newButton.layoutParams = params
+                    newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
+
+                    newButton.setOnLongClickListener(taskDragListener)
                 }
             }
         }
 
-        button.text = i.toString()
     }
 
-    fun assignIcons(mod: ProjectModel): Button {
-        when (mod.skill) {
-            MemberSkill.AUDIO -> return Button(this, null, R.style.artBlock, R.style.audioBlock)
-
-            MemberSkill.PROGRAMMING -> return Button(
-                this,
-                null,
-                R.style.artBlock,
-                R.style.progBlock
-            )
-
-            MemberSkill.DESIGN -> return Button(this, null, R.style.artBlock, R.style.designBlock)
-
-            MemberSkill.ART -> return Button(this, null, R.style.artBlock, R.style.artBlock)
-        }
+    private fun viewAllTasks() = OnClickListener {
+        refineButtons[0].background = refineButtons[0].context.getDrawable(R.drawable.taskblock_dark)
+        refineButtons[currentRefine].background = refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
+        currentRefine = 0
+        rows.forEach{ it.removeAllViews() }
+        populateRows()
     }
 }

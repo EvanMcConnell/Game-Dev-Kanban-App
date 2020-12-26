@@ -44,6 +44,21 @@ class ProjectJSONStore : ProjectStore {
         return outputArray
     }
 
+    override fun findSkill(skill: MemberSkill) : ArrayList<ProjectModel> {
+        var tempArray = ArrayList<ProjectModel>()
+        for(x: ProjectModel in projects){
+            tempArray.add(x)
+        }
+        var outputArray = ArrayList<ProjectModel>()
+        var tempProjectModel: ProjectModel
+        while(tempArray.find { p -> p.skill == skill } != null){
+            tempProjectModel = tempArray.find { p -> p.skill == skill }!!
+            outputArray.add(tempProjectModel)
+            tempArray.remove(tempProjectModel)
+        }
+        return outputArray
+    }
+
     override fun findOne(id: Int) : ProjectModel? {
         return projects.find { p -> p.id == id }
     }

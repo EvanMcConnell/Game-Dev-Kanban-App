@@ -58,16 +58,7 @@
                             android:layout_marginBottom="7dp"
                             android:minWidth="500dp"
                             android:minHeight="156dp"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/button"
-                                style="@style/progBlock"
-                                android:drawableTop="@drawable/ic_bracket"
-                                android:paddingTop="35dp"
-                                android:text="Third skill tree" />
-
-                        </TableRow>
+                            android:orientation="horizontal"/>
 
                     </TableLayout>
                 </HorizontalScrollView>
@@ -77,7 +68,7 @@
             <LinearLayout
                 android:id="@+id/DoingLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="191dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingBottom="8dp">
 
@@ -98,8 +89,7 @@
                     <TableLayout
                         android:id="@+id/DoingTableView"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp">
+                        android:layout_height="wrap_content">
 
                         <TableRow
                             android:id="@+id/DoingRow"
@@ -110,7 +100,9 @@
                             android:layout_marginBottom="7dp"
                             android:minWidth="500dp"
                             android:minHeight="156dp"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal" >
+
+                        </TableRow>
 
                     </TableLayout>
                 </HorizontalScrollView>
@@ -120,7 +112,7 @@
             <LinearLayout
                 android:id="@+id/IdleLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingBottom="8dp">
 
@@ -135,14 +127,13 @@
                 <HorizontalScrollView
                     android:id="@+id/IdleScrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/taskgrid">
 
                     <TableLayout
                         android:id="@+id/IdleTableView"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="8dp">
+                        android:layout_height="wrap_content">
 
                         <TableRow
                             android:id="@+id/IdleRow"
@@ -153,7 +144,9 @@
                             android:layout_marginBottom="7dp"
                             android:minWidth="500dp"
                             android:minHeight="156dp"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal" >
+
+                        </TableRow>
 
                     </TableLayout>
                 </HorizontalScrollView>
@@ -163,7 +156,7 @@
             <LinearLayout
                 android:id="@+id/DoneLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingBottom="8dp">
 
@@ -178,13 +171,13 @@
                 <HorizontalScrollView
                     android:id="@+id/DoneScrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/taskgrid">
 
                     <TableLayout
                         android:id="@+id/DoneTableView"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content">
 
                         <TableRow
                             android:id="@+id/DoneRow"
@@ -195,7 +188,9 @@
                             android:layout_marginBottom="7dp"
                             android:minWidth="500dp"
                             android:minHeight="156dp"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal" >
+
+                        </TableRow>
 
                     </TableLayout>
                 </HorizontalScrollView>
@@ -204,5 +199,63 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/refineButtonsLayout"
+        android:layout_width="409dp"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/KanbanScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/viewAllButton"
+            style="@style/refineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/taskblock_dark"
+            android:text="All" />
+
+        <Button
+            android:id="@+id/viewProgButton"
+            style="@style/refineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_bracket"
+            android:foregroundGravity="center_horizontal" />
+
+        <Button
+            android:id="@+id/viewDesignButton"
+            style="@style/refineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_bulb" />
+
+        <Button
+            android:id="@+id/viewAudioButton"
+            style="@style/refineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_note" />
+
+        <Button
+            android:id="@+id/viewArtButton"
+            style="@style/refineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_palette" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
