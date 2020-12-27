@@ -1,4 +1,4 @@
-package com.example.greetings.models
+package com.example.gamedevKanban.models
 
 enum class MemberSkill {
     PROGRAMMING,

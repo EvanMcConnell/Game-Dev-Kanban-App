@@ -1,4 +1,4 @@
-package com.example.greetings.models
+package com.example.gamedevKanban.models
 
 import android.content.Context
 import com.example.greetings.helpers.exists
@@ -78,10 +78,15 @@ class ProjectJSONStore : ProjectStore {
         // todo
     }
 
-    override fun delete(project: ProjectModel) {}
+    override fun delete(id: Int) {
+        projects.remove(findOne(id))
+        serialize()
+    }
 
     private fun serialize() {
-        val jsonString = gsonBuilder.toJson(projects, listType)
+        val jsonString = gsonBuilder.toJson(projects,
+            listType
+        )
         write(context, JSON_FILE, jsonString)
     }
 

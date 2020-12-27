@@ -1,4 +1,4 @@
-package com.example.greetings.models
+package com.example.gamedevKanban.models
 
 
 data class ProjectModel(var id: Int = 0,
@@ -6,4 +6,5 @@ data class ProjectModel(var id: Int = 0,
                         var skill: MemberSkill,
                         //var members: ArrayList<MemberModel> = ArrayList(),
                         var description: String = "",
-                        var state: ProjectState = ProjectState.TODO)
+                        var state: ProjectState = ProjectState.TODO
+)

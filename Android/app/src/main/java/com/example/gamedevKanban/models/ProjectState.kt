@@ -1,10 +1,8 @@
-package com.example.greetings.models
+package com.example.gamedevKanban.models
 
 enum class ProjectState {
     TODO,
     DOING,
     IDLE,
-    INPROGRESS,
-    WAITING,
     DONE
 }

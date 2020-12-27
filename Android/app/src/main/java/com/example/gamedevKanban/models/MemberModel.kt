@@ -1,4 +1,4 @@
-package com.example.greetings.models
+package com.example.gamedevKanban.models
 
 data class MemberModel(var id: Int = 0,
                        var name: String = "",

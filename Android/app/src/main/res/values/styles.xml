@@ -60,4 +60,11 @@
         <item name="android:layout_marginHorizontal">1dp</item>
     </style>
 
+    <style name="skillChoiceButton">
+        <item name="android:background">@drawable/taskblock</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingHorizontal">35dp</item>
+        <item name="android:layout_marginHorizontal">1dp</item>
+    </style>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.example.greetings.models
+package com.example.gamedevKanban.models
 
 interface ProjectStore {
     fun findAll(): List<ProjectModel>
@@ -7,5 +7,5 @@ interface ProjectStore {
     fun findOne(id: Int): ProjectModel?
     fun create(project: ProjectModel)
     fun update(project: ProjectModel)
-    fun delete(project: ProjectModel)
+    fun delete(id: Int)
 }

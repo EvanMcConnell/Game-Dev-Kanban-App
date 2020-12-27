@@ -1,11 +1,7 @@
-package com.example.greetings.models
+package com.example.gamedevKanban.models
 
 import android.content.Context
-import android.widget.Toast
 import com.example.greetings.helpers.exists
-import com.example.greetings.helpers.read
-import com.example.greetings.helpers.write
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
@@ -48,7 +44,7 @@ class MemberMemStore : MemberStore {
             tempArray.add(x)
         }
         var outputArray = ArrayList<MemberModel>()
-        var tempMemberModel = MemberModel()
+        var tempMemberModel: MemberModel
         while(tempArray.find { m -> m.skills.contains(skill) } != null){
             tempMemberModel = tempArray.find { m -> m.skills.contains(skill) }!!
             outputArray.add(tempMemberModel)
@@ -67,7 +63,7 @@ class MemberMemStore : MemberStore {
     }
 
     override fun update(member: MemberModel) {
-        var foundMember = findOne(member.id!!)
+        var foundMember = findOne(member.id)
         if (foundMember != null) {
             foundMember.name = member.name
             foundMember.description = member.description
@@ -90,7 +86,9 @@ class MemberMemStore : MemberStore {
     }
 
     private fun serialize() {
-        val jsonString = memberGsonBuilder.toJson(members, memberListType)
+//        val jsonString = memberGsonBuilder.toJson(members,
+//            memberListType
+//        )
 //        write(MEMBERS_FILE, jsonString)
     }
 
