@@ -10,14 +10,14 @@
 
     <ScrollView
         android:id="@+id/KanbanScrollView"
-        android:layout_width="414dp"
-        android:layout_height="664dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="wrap"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.993">
+        app:layout_constraintTop_toBottomOf="@id/refineButtonsLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,7 +58,8 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="7dp"
                             android:minHeight="156dp"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal"
+                            android:paddingRight="1000dp" />
 
                     </TableLayout>
                 </HorizontalScrollView>
@@ -83,23 +84,24 @@
                 <HorizontalScrollView
                     android:id="@+id/DoingScrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/taskgrid">
 
                     <TableLayout
                         android:id="@+id/DoingTableView"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
 
                         <TableRow
                             android:id="@+id/DoingRow"
                             android:layout_width="wrap_content"
-                            android:layout_height="156dp"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="15dp"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="7dp"
                             android:minHeight="156dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:paddingRight="1000dp">
 
                         </TableRow>
 
@@ -142,7 +144,8 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="7dp"
                             android:minHeight="156dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:paddingRight="1000dp">
 
                         </TableRow>
 
@@ -186,6 +189,7 @@
                             android:layout_marginBottom="7dp"
                             android:minHeight="156dp"
                             android:orientation="horizontal"
+                            android:paddingRight="1000dp"
                             android:visibility="visible">
 
                         </TableRow>
@@ -214,8 +218,9 @@
 
     <LinearLayout
         android:id="@+id/refineButtonsLayout"
-        android:layout_width="409dp"
-        android:layout_height="65dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/KanbanScrollView"
         app:layout_constraintEnd_toEndOf="parent"

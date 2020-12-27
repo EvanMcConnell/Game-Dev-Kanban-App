@@ -1,6 +1,5 @@
 package com.example.gamedevKanban
 
-import android.app.Application
 import android.content.ClipData
 import android.content.ClipDescription
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +8,8 @@ import android.view.DragEvent
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TableRow
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.marginRight
 import com.example.gamedevKanban.models.*
 import com.example.greetings.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     var backButtonPresses = 0
-    var currentScreen:Int = 0
+    var currentScreen: Int = 0
 
     var nextEmpyTaskID: Int = 0
 
@@ -40,7 +37,10 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var projects: ProjectStore
 
+    var tables: ArrayList<HorizontalScrollView> = ArrayList()
     var rows: ArrayList<TableRow> = ArrayList()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -77,6 +77,11 @@ class MainActivity : AppCompatActivity() {
         rows.add(IdleRow)
         DoneRow.setOnDragListener(dragListener)
         rows.add(DoneRow)
+
+        tables.add(ToDoScrollView)
+        tables.add(DoingScrollView)
+        tables.add(IdleScrollView)
+        tables.add(DoneScrollView)
 
         openAddTaskLayoutButton.setOnClickListener(
             openAddTaskMenu()
@@ -143,24 +148,25 @@ class MainActivity : AppCompatActivity() {
         populateRows()
     }
 
-    override fun onBackPressed(){
-        when(currentScreen){
-            0->{
+    override fun onBackPressed() {
+        when (currentScreen) {
+            0 -> {
                 backButtonPresses++
-                if(backButtonPresses==1){
-                    Toast.makeText(this, "Press Back Button Again to Exit", Toast.LENGTH_LONG).show()
-                } else if(backButtonPresses == 2){
+                if (backButtonPresses == 1) {
+                    Toast.makeText(this, "Press Back Button Again to Exit", Toast.LENGTH_LONG)
+                        .show()
+                } else if (backButtonPresses == 2) {
                     finishAffinity()
                 }
             }
-            1,2->{
+            1, 2 -> {
                 toggleMenu(
                     detailLayout,
                     openAddTaskLayoutButton
                 )
                 currentScreen = 0
             }
-            3->{
+            3 -> {
                 toggleMenu(
                     confirmDeletionLayout,
                     detailLayout
@@ -199,6 +205,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openAddTaskMenu() = OnClickListener {
+        backButtonPresses = 0
         currentScreen = 1
 
         toggleMenu(openAddTaskLayoutButton, detailLayout)
@@ -210,6 +217,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openViewTaskMenu(task: ProjectModel) = OnClickListener {
+        backButtonPresses = 0
         currentScreen = 2
 
         selectedTaskID = task.id
@@ -218,18 +226,18 @@ class MainActivity : AppCompatActivity() {
 
         titleTextField.setText(task.title)
 
-        when (task.skill) {
-            MemberSkill.PROGRAMMING -> setDetailLayoutSelectedSkill(addProgChoice, task.skill)
-            MemberSkill.DESIGN -> setDetailLayoutSelectedSkill(addDesignChoice, task.skill)
-            MemberSkill.AUDIO -> setDetailLayoutSelectedSkill(addAudioButton, task.skill)
-            MemberSkill.ART -> setDetailLayoutSelectedSkill(addArtChoice, task.skill)
-        }
 
+        when (task.skill) {
+            MemberSkill.PROGRAMMING -> addProgChoice.performClick()
+            MemberSkill.DESIGN -> addDesignChoice.performClick()
+            MemberSkill.AUDIO -> addAudioButton.performClick()
+            MemberSkill.ART -> addArtChoice.performClick()
+        }
         when (task.state) {
-            ProjectState.TODO -> setDetailLayoutSelectedState(addToDoChoice, task.state)
-            ProjectState.DOING -> setDetailLayoutSelectedState(addDoingChoice, task.state)
-            ProjectState.IDLE -> setDetailLayoutSelectedState(addIdleButton, task.state)
-            ProjectState.DONE -> setDetailLayoutSelectedState(addDoneChoice, task.state)
+            ProjectState.TODO -> addToDoChoice.performClick()
+            ProjectState.DOING -> addDoingChoice.performClick()
+            ProjectState.IDLE -> addIdleButton.performClick()
+            ProjectState.DONE -> addDoneChoice.performClick()
         }
 
         descriptionTextField.setText(task.description)
@@ -243,6 +251,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setDetailLayoutSelectedState(thisButton: Button, newState: ProjectState) =
         OnClickListener {
+            if (thisButton == selectedAddStateButton) {
+                return@OnClickListener
+            }
 
             thisButton.background = thisButton.context.getDrawable(R.drawable.taskblock_red)
 
@@ -256,6 +267,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setDetailLayoutSelectedSkill(thisButton: Button, newSkill: MemberSkill) =
         OnClickListener {
+            if (thisButton == selectedAddSkillButton) {
+                return@OnClickListener
+            }
 
             thisButton.background = thisButton.context.getDrawable(R.drawable.taskblock_red)
 
@@ -265,9 +279,11 @@ class MainActivity : AppCompatActivity() {
             selectedAddSkillButton = thisButton
 
             selectedAddSkill = newSkill
+
+//            Toast.makeText(this, newSkill.name, Toast.LENGTH_SHORT).show()
         }
 
-    private val taskDragListener = OnLongClickListener {
+    private fun taskDragListener(task: ProjectModel) = OnLongClickListener {
         val clipText = "Test"
         val item = ClipData.Item(clipText)
         val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
@@ -275,6 +291,9 @@ class MainActivity : AppCompatActivity() {
 
         val dragShadowBuilder = DragShadowBuilder(it)
         it.startDragAndDrop(data, dragShadowBuilder, it, 0)
+
+        //Toast.makeText(this, task.title, Toast.LENGTH_SHORT).show()
+        selectedTaskID = task.id
 
         draggedView.add(it)
 
@@ -312,19 +331,15 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             DragEvent.ACTION_DROP -> {
-                //Toast.makeText(this, dragData, Toast.LENGTH_SHORT).show()
-                Toast.makeText(this, "Destination: $view", Toast.LENGTH_LONG).show()
+                //Toast.makeText(this, "Destination: $view", Toast.LENGTH_LONG).show()
                 view.invalidate()
-
-
-
 
                 if (rows.contains(view)) {
 
                     val v = event.localState as View
                     val owner = v.parent as ViewGroup
 
-                    val destination = view as LinearLayout
+                    val destination = view as TableRow
 
                     draggedView.removeAt(0)
                     owner.removeView(v)
@@ -332,12 +347,13 @@ class MainActivity : AppCompatActivity() {
 
                     destination.addView(v)
                     v.visibility = VISIBLE
-                    true
-                } else {
-                    true
+
+                    updateStateAfterDrop(view)
                 }
+                true
             }
             DragEvent.ACTION_DRAG_ENDED -> {
+                //Toast.makeText(this, "Destination: $view", Toast.LENGTH_SHORT).show()
                 if (draggedView.size != 0) {
                     draggedView[0].visibility = VISIBLE
                     draggedView.removeAt(0)
@@ -347,6 +363,30 @@ class MainActivity : AppCompatActivity() {
             }
             else -> false
         }
+    }
+
+
+    private fun updateStateAfterDrop(v: View) {
+        var newState: ProjectState = ProjectState.TODO
+        when (v) {
+            rows[1] -> newState = ProjectState.DOING
+            rows[2] -> newState = ProjectState.IDLE
+            rows[3] -> newState = ProjectState.DONE
+        }
+
+        val taskCopy: ProjectModel = projects.findOne(selectedTaskID)!!
+
+        projects.delete(selectedTaskID)
+
+        projects.create(
+            ProjectModel(
+                taskCopy.id,
+                taskCopy.title,
+                taskCopy.skill,
+                taskCopy.description,
+                newState
+            )
+        )
     }
 
 
@@ -427,14 +467,20 @@ class MainActivity : AppCompatActivity() {
                         TableRow.LayoutParams.MATCH_PARENT
                     )
 
+                    params.setMargins(
+                        0,
+                        0,
+                        10 * newButton.context.resources.displayMetrics.density.toInt(),
+                        0
+                    )
 
                     ToDoRow.addView(newButton)
 
                     newButton.layoutParams = params
                     newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
-                    newButton.setOnLongClickListener(taskDragListener)
-                    //newButton.setOnClickListener(openViewTaskMenu(it))
+                    newButton.setOnLongClickListener(taskDragListener(it))
+                    newButton.setOnClickListener(openViewTaskMenu(it))
                 }
 
                 ProjectState.DOING -> {
@@ -476,14 +522,20 @@ class MainActivity : AppCompatActivity() {
                         TableRow.LayoutParams.MATCH_PARENT
                     )
 
+                    params.setMargins(
+                        0,
+                        0,
+                        10 * newButton.context.resources.displayMetrics.density.toInt(),
+                        0
+                    )
 
                     DoingRow.addView(newButton)
 
                     newButton.layoutParams = params
                     newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
-                    newButton.setOnLongClickListener(taskDragListener)
-                    //newButton.setOnClickListener(openViewTaskMenu(it))
+                    newButton.setOnLongClickListener(taskDragListener(it))
+                    newButton.setOnClickListener(openViewTaskMenu(it))
                 }
 
                 ProjectState.IDLE -> {
@@ -526,13 +578,20 @@ class MainActivity : AppCompatActivity() {
                     )
 
 
+                    params.setMargins(
+                        0,
+                        0,
+                        10 * newButton.context.resources.displayMetrics.density.toInt(),
+                        0
+                    )
+
                     IdleRow.addView(newButton)
 
                     newButton.layoutParams = params
                     newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
-                    newButton.setOnLongClickListener(taskDragListener)
-                    //newButton.setOnClickListener(openViewTaskMenu(it))
+                    newButton.setOnLongClickListener(taskDragListener(it))
+                    newButton.setOnClickListener(openViewTaskMenu(it))
                 }
 
                 ProjectState.DONE -> {
@@ -580,11 +639,18 @@ class MainActivity : AppCompatActivity() {
                     }
                     DoneRow.addView(newButton)
 
+                    params.setMargins(
+                        0,
+                        0,
+                        10 * newButton.context.resources.displayMetrics.density.toInt(),
+                        0
+                    )
+
                     newButton.layoutParams = params
                     newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
-                    newButton.setOnLongClickListener(taskDragListener)
-                    //newButton.setOnClickListener(openViewTaskMenu(it))
+                    newButton.setOnLongClickListener(taskDragListener(it))
+                    newButton.setOnClickListener(openViewTaskMenu(it))
                 }
             }
         }
@@ -638,13 +704,19 @@ class MainActivity : AppCompatActivity() {
                         TableRow.LayoutParams.MATCH_PARENT
                     )
 
+                    params.setMargins(
+                        0,
+                        0,
+                        10 * newButton.context.resources.displayMetrics.density.toInt(),
+                        0
+                    )
 
                     ToDoRow.addView(newButton)
 
                     newButton.layoutParams = params
                     newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
-                    newButton.setOnLongClickListener(taskDragListener)
+                    newButton.setOnLongClickListener(taskDragListener(it))
                     newButton.setOnClickListener(openViewTaskMenu(it))
                 }
 
@@ -687,13 +759,19 @@ class MainActivity : AppCompatActivity() {
                         TableRow.LayoutParams.MATCH_PARENT
                     )
 
+                    params.setMargins(
+                        0,
+                        0,
+                        10 * newButton.context.resources.displayMetrics.density.toInt(),
+                        0
+                    )
 
                     DoingRow.addView(newButton)
 
                     newButton.layoutParams = params
                     newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
-                    newButton.setOnLongClickListener(taskDragListener)
+                    newButton.setOnLongClickListener(taskDragListener(it))
                     newButton.setOnClickListener(openViewTaskMenu(it))
                 }
 
@@ -736,13 +814,19 @@ class MainActivity : AppCompatActivity() {
                         TableRow.LayoutParams.MATCH_PARENT
                     )
 
+                    params.setMargins(
+                        0,
+                        0,
+                        10 * newButton.context.resources.displayMetrics.density.toInt(),
+                        0
+                    )
 
                     IdleRow.addView(newButton)
 
                     newButton.layoutParams = params
                     newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
-                    newButton.setOnLongClickListener(taskDragListener)
+                    newButton.setOnLongClickListener(taskDragListener(it))
                     newButton.setOnClickListener(openViewTaskMenu(it))
                 }
 
@@ -758,6 +842,12 @@ class MainActivity : AppCompatActivity() {
                         TableRow.LayoutParams.MATCH_PARENT
                     )
 
+                    params.setMargins(
+                        0,
+                        0,
+                        10 * newButton.context.resources.displayMetrics.density.toInt(),
+                        0
+                    )
 
                     //params.topMargin = 35 * newButton.context.resources.displayMetrics.density.toInt()
                     //params.setMargins(0, 50, 0, 0)
@@ -794,13 +884,12 @@ class MainActivity : AppCompatActivity() {
                     newButton.layoutParams = params
                     newButton.background = newButton.context.getDrawable(R.drawable.taskblock)
 
-                    newButton.setOnLongClickListener(taskDragListener)
+                    newButton.setOnLongClickListener(taskDragListener(it))
                     newButton.setOnClickListener(openViewTaskMenu(it))
                 }
             }
         }
 
-        titleTextField.setText(nextEmpyTaskID.toString())
 
     }
 
