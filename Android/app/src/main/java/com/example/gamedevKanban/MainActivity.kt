@@ -1,5 +1,6 @@
 package com.example.gamedevKanban
 
+import android.app.Application
 import android.content.ClipData
 import android.content.ClipDescription
 import androidx.appcompat.app.AppCompatActivity
@@ -12,12 +13,14 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.Toast
-import androidx.core.view.children
 import com.example.gamedevKanban.models.*
 import com.example.greetings.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    var backButtonPresses = 0
+    var currentScreen:Int = 0
 
     var nextEmpyTaskID: Int = 0
 
@@ -140,6 +143,33 @@ class MainActivity : AppCompatActivity() {
         populateRows()
     }
 
+    override fun onBackPressed(){
+        when(currentScreen){
+            0->{
+                backButtonPresses++
+                if(backButtonPresses==1){
+                    Toast.makeText(this, "Press Back Button Again to Exit", Toast.LENGTH_LONG).show()
+                } else if(backButtonPresses == 2){
+                    finishAffinity()
+                }
+            }
+            1,2->{
+                toggleMenu(
+                    detailLayout,
+                    openAddTaskLayoutButton
+                )
+                currentScreen = 0
+            }
+            3->{
+                toggleMenu(
+                    confirmDeletionLayout,
+                    detailLayout
+                )
+                currentScreen = 2
+            }
+        }
+    }
+
     private fun toggleMenu(thisView: View, newView: View) {
         thisView.visibility = INVISIBLE
         newView.visibility = VISIBLE
@@ -160,6 +190,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openDeletionConfirmationLayout() = OnClickListener {
+        currentScreen = 3
+
         toggleMenu(
             detailLayout,
             confirmDeletionLayout
@@ -167,6 +199,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openAddTaskMenu() = OnClickListener {
+        currentScreen = 1
+
         toggleMenu(openAddTaskLayoutButton, detailLayout)
 
         deleteTaskButton.visibility = GONE
@@ -176,6 +210,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openViewTaskMenu(task: ProjectModel) = OnClickListener {
+        currentScreen = 2
+
         selectedTaskID = task.id
 
         toggleMenu(openAddTaskLayoutButton, detailLayout)
@@ -198,11 +234,11 @@ class MainActivity : AppCompatActivity() {
 
         descriptionTextField.setText(task.description)
 
-        acceptChangesButton.visibility = GONE
+        acceptChangesButton.visibility = VISIBLE
         deleteTaskButton.visibility = VISIBLE
 
-        acceptChangesButton.text = "SaveChanges"
-        acceptChangesButton.setOnClickListener(createNewTask())
+        acceptChangesButton.text = "Save Changes"
+        acceptChangesButton.setOnClickListener(updateTask())
     }
 
     private fun setDetailLayoutSelectedState(thisButton: Button, newState: ProjectState) =
@@ -276,8 +312,6 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             DragEvent.ACTION_DROP -> {
-                //val item = event.clipData.getItemAt(0)
-                //val dragData = item.text
                 //Toast.makeText(this, dragData, Toast.LENGTH_SHORT).show()
                 Toast.makeText(this, "Destination: $view", Toast.LENGTH_LONG).show()
                 view.invalidate()
@@ -321,32 +355,32 @@ class MainActivity : AppCompatActivity() {
 
         when (searchSkill) {
             MemberSkill.PROGRAMMING -> {
-                refineButtons[1].background =
-                    refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
                 refineButtons[currentRefine].background =
                     refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
                 currentRefine = 1
+                refineButtons[currentRefine].background =
+                    refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
             }
             MemberSkill.DESIGN -> {
-                refineButtons[2].background =
-                    refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
                 refineButtons[currentRefine].background =
                     refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
                 currentRefine = 2
+                refineButtons[currentRefine].background =
+                    refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
             }
             MemberSkill.AUDIO -> {
-                refineButtons[3].background =
-                    refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
                 refineButtons[currentRefine].background =
                     refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
                 currentRefine = 3
+                refineButtons[currentRefine].background =
+                    refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
             }
             MemberSkill.ART -> {
-                refineButtons[4].background =
-                    refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
                 refineButtons[currentRefine].background =
                     refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
                 currentRefine = 4
+                refineButtons[currentRefine].background =
+                    refineButtons[1].context.getDrawable(R.drawable.taskblock_dark)
             }
         }
 
@@ -776,55 +810,55 @@ class MainActivity : AppCompatActivity() {
         refineButtons[currentRefine].background =
             refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
         currentRefine = 0
-        rows.forEach { it.removeAllViews() }
+
         populateRows()
     }
 
     private fun createNewTask() = OnClickListener {
-        var valid = false
 
         if (titleTextField.text.isEmpty()) {
             Toast.makeText(this, "Please Provide a Title", Toast.LENGTH_LONG).show()
         } else if (descriptionTextField.text.isEmpty()) {
             Toast.makeText(this, "Please Provide a Description", Toast.LENGTH_LONG).show()
-        } else valid = true
+        } else {
 
-
-        projects.create(
-            ProjectModel(
-                nextEmpyTaskID,
-                titleTextField.text.toString(),
-                selectedAddSkill,
-                descriptionTextField.text.toString(),
-                selectedAddState
+            projects.create(
+                ProjectModel(
+                    nextEmpyTaskID,
+                    titleTextField.text.toString(),
+                    selectedAddSkill,
+                    descriptionTextField.text.toString(),
+                    selectedAddState
+                )
             )
-        )
 
 
-        toggleMenu(
-            detailLayout,
-            openAddTaskLayoutButton
-        )
+            toggleMenu(
+                detailLayout,
+                openAddTaskLayoutButton
+            )
 
-        Toast.makeText(this, "New Task Created", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "New Task Created", Toast.LENGTH_LONG).show()
 
-        when (currentRefine) {
-            0 -> {
-                populateRows()
-            }
-            1 -> {
-                refineRows(MemberSkill.PROGRAMMING)
-            }
-            2 -> {
-                refineRows(MemberSkill.DESIGN)
-            }
-            3 -> {
-                refineRows(MemberSkill.AUDIO)
-            }
-            4 -> {
-                refineRows(MemberSkill.ART)
-            }
+//        when (currentRefine) {
+//            0 -> {
+//                populateRows()
+//            }
+//            1 -> {
+//                refineRows(MemberSkill.PROGRAMMING)
+//            }
+//            2 -> {
+//                refineRows(MemberSkill.DESIGN)
+//            }
+//            3 -> {
+//                refineRows(MemberSkill.AUDIO)
+//            }
+//            4 -> {
+//                refineRows(MemberSkill.ART)
+//            }
+//        }
         }
+        resetMainScreen()
     }
 
     private fun deleteTask() = OnClickListener {
@@ -834,5 +868,37 @@ class MainActivity : AppCompatActivity() {
             confirmDeletionLayout,
             openAddTaskLayoutButton
         )
+
+        resetMainScreen()
+    }
+
+    private fun updateTask() = OnClickListener {
+        projects.delete(selectedTaskID)
+
+        projects.create(
+            ProjectModel(
+                selectedTaskID,
+                titleTextField.text.toString(),
+                selectedAddSkill,
+                descriptionTextField.text.toString(),
+                selectedAddState
+            )
+        )
+
+        toggleMenu(
+            detailLayout,
+            openAddTaskLayoutButton
+        )
+        resetMainScreen()
+    }
+
+    private fun resetMainScreen() {
+        refineButtons[currentRefine].background =
+            refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock)
+        currentRefine = 0
+        refineButtons[currentRefine].background =
+            refineButtons[currentRefine].context.getDrawable(R.drawable.taskblock_dark)
+
+        populateRows()
     }
 }
