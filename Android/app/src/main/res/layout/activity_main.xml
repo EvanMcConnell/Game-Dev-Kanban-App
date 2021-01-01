@@ -299,7 +299,6 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:autoText="true"
                 android:text="Title"
                 android:textAlignment="center"
                 android:textColor="#d7385e" />
@@ -309,7 +308,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:autoText="true"
                 android:background="@drawable/taskgrid"
                 android:ems="10"
                 android:inputType="textPersonName"
@@ -427,7 +425,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/taskgrid"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textMultiLine" />
         </LinearLayout>
 
         <LinearLayout

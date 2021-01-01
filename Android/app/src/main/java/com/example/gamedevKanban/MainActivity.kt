@@ -83,6 +83,9 @@ class MainActivity : AppCompatActivity() {
         tables.add(IdleScrollView)
         tables.add(DoneScrollView)
 
+        detailLayout.setOnClickListener{ true }
+        confirmDeletionLayout.setOnClickListener { true }
+
         openAddTaskLayoutButton.setOnClickListener(
             openAddTaskMenu()
         )
@@ -209,6 +212,9 @@ class MainActivity : AppCompatActivity() {
         currentScreen = 1
 
         toggleMenu(openAddTaskLayoutButton, detailLayout)
+
+        descriptionTextField.setText("")
+        titleTextField.setText("")
 
         deleteTaskButton.visibility = GONE
 
@@ -391,7 +397,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun refineRows(searchSkill: MemberSkill) = OnClickListener {
-        rows.forEach { it.removeAllViews() }
+        rows.forEach {
+            it.removeAllViews()
+
+            val parentScrollView:HorizontalScrollView = it.parent.parent as HorizontalScrollView
+            parentScrollView.scrollTo(0, 0)
+        }
 
         when (searchSkill) {
             MemberSkill.PROGRAMMING -> {
@@ -657,7 +668,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun populateRows() {
-        rows.forEach { it.removeAllViews() }
+        rows.forEach {
+            it.removeAllViews()
+            it.scrollTo(0, 0)
+        }
 
         projects.findAll().forEach {
             if (it.id >= nextEmpyTaskID) nextEmpyTaskID = it.id + 1
